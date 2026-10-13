@@ -1,0 +1,811 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jabra Floorwalk Checklist — Job Aid</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+      font-size: 13px;
+      line-height: 1.55;
+      color: #1f2328;
+      background: #f4f6f9;
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 32px 36px 24px;
+    }
+
+    /* ── Header ── */
+    .header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      border-bottom: 3px solid #0062ff;
+      padding-bottom: 14px;
+      margin-bottom: 22px;
+      gap: 16px;
+    }
+    .header-left h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0062ff;
+      letter-spacing: -0.3px;
+    }
+    .header-left p {
+      font-size: 12px;
+      color: #57606a;
+      margin-top: 3px;
+    }
+    .badge-row {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 9px;
+      border-radius: 12px;
+      background: #e8f0ff;
+      color: #0062ff;
+      border: 1px solid #c0d4ff;
+      white-space: nowrap;
+    }
+    .badge.green  { background: #eaf6ef; color: #198754; border-color: #b5dfca; }
+    .badge.dark   { background: #f0f1f3; color: #1f2328; border-color: #d0d4da; }
+    .header-right {
+      text-align: right;
+      font-size: 11px;
+      color: #57606a;
+      white-space: nowrap;
+    }
+    .header-right .doc-id {
+      font-weight: 700;
+      font-size: 12px;
+      color: #1f2328;
+    }
+
+    /* ── Grid layout ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .three-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .full-width { margin-bottom: 16px; }
+
+    /* ── Section card ── */
+    .card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .card-header {
+      background: #0062ff;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      padding: 6px 12px;
+    }
+    .card-header.green  { background: #198754; }
+    .card-header.red    { background: #dc3545; }
+    .card-header.dark   { background: #2c3440; }
+    .card-header.grey   { background: #57606a; }
+    .card-header.teal   { background: #0d7377; }
+    .card-body {
+      padding: 10px 12px;
+    }
+
+    /* ── Steps ── */
+    .steps { list-style: none; counter-reset: step-counter; }
+    .steps li {
+      counter-increment: step-counter;
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      padding: 5px 0;
+      border-bottom: 1px solid #f0f1f3;
+      font-size: 12.5px;
+    }
+    .steps li:last-child { border-bottom: none; }
+    .steps li::before {
+      content: counter(step-counter);
+      min-width: 20px;
+      height: 20px;
+      background: #0062ff;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .steps li strong { color: #0062ff; }
+    .steps li .note {
+      font-size: 11px;
+      color: #57606a;
+      margin-top: 1px;
+    }
+
+    /* ── Status table ── */
+    .status-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 7px 0;
+      border-bottom: 1px solid #f0f1f3;
+    }
+    .status-row:last-child { border-bottom: none; }
+    .status-pill {
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      min-width: 70px;
+      text-align: center;
+    }
+    .pill-good   { background: #d1f0e0; color: #198754; border: 1px solid #a3d9ba; }
+    .pill-issue  { background: #fde8ea; color: #dc3545; border: 1px solid #f5b8be; }
+    .status-desc { font-size: 12px; color: #1f2328; }
+    .status-desc ul { padding-left: 14px; margin-top: 3px; }
+    .status-desc ul li { font-size: 11.5px; color: #57606a; }
+
+    /* ── Remarks list ── */
+    .remark-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      padding: 4px 0;
+      border-bottom: 1px solid #f0f1f3;
+      font-size: 12px;
+    }
+    .remark-item:last-child { border-bottom: none; }
+    .remark-bullet {
+      width: 6px; height: 6px;
+      background: #dc3545;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    /* ── Site room table ── */
+    .site-block { margin-bottom: 10px; }
+    .site-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: #0062ff;
+      margin-bottom: 4px;
+      padding-bottom: 3px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .floor-row {
+      display: flex;
+      gap: 6px;
+      align-items: baseline;
+      padding: 2px 0;
+      font-size: 11.5px;
+    }
+    .floor-label {
+      font-weight: 600;
+      color: #1f2328;
+      min-width: 85px;
+      flex-shrink: 0;
+    }
+    .room-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+    .chip {
+      font-size: 10.5px;
+      background: #f4f6f9;
+      border: 1px solid #dde1e7;
+      border-radius: 3px;
+      padding: 1px 6px;
+      color: #1f2328;
+      white-space: nowrap;
+    }
+    .room-count-badge {
+      font-size: 10px;
+      font-weight: 700;
+      background: #0062ff;
+      color: #fff;
+      border-radius: 10px;
+      padding: 1px 7px;
+      margin-left: 4px;
+    }
+
+    /* ── Settings table ── */
+    .setting-row {
+      display: flex;
+      gap: 10px;
+      padding: 5px 0;
+      border-bottom: 1px solid #f0f1f3;
+      font-size: 12px;
+      align-items: flex-start;
+    }
+    .setting-row:last-child { border-bottom: none; }
+    .setting-key {
+      font-weight: 600;
+      color: #1f2328;
+      min-width: 130px;
+      flex-shrink: 0;
+    }
+    .setting-val { color: #57606a; }
+
+    /* ── Tabs overview ── */
+    .tab-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      padding: 8px 0 2px;
+    }
+    .tab-chip {
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 4px 13px;
+      border-radius: 4px;
+      background: #e8f0ff;
+      color: #0062ff;
+      border: 1px solid #c0d4ff;
+      text-align: center;
+    }
+    .tab-chip span {
+      display: block;
+      font-size: 10px;
+      font-weight: 400;
+      color: #57606a;
+      margin-top: 1px;
+    }
+
+    /* ── Install steps ── */
+    .platform-header {
+      font-size: 12px;
+      font-weight: 700;
+      color: #1f2328;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .platform-header .platform-badge {
+      font-size: 10px;
+      background: #2c3440;
+      color: #fff;
+      border-radius: 3px;
+      padding: 1px 7px;
+    }
+    .install-steps { list-style: none; counter-reset: is-counter; }
+    .install-steps li {
+      counter-increment: is-counter;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 12px;
+      padding: 3px 0;
+      color: #1f2328;
+    }
+    .install-steps li::before {
+      content: counter(is-counter);
+      min-width: 17px;
+      height: 17px;
+      background: #2c3440;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── Notes / callout ── */
+    .callout {
+      background: #fffbea;
+      border-left: 3px solid #e6a817;
+      padding: 8px 12px;
+      border-radius: 0 4px 4px 0;
+      font-size: 12px;
+      color: #5a4200;
+      margin-top: 8px;
+    }
+    .callout strong { color: #5a4200; }
+    .callout ul { padding-left: 15px; margin-top: 4px; }
+    .callout ul li { padding: 1px 0; }
+
+    /* ── Shift assignment ── */
+    .shift-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 0;
+      border-bottom: 1px solid #f0f1f3;
+      font-size: 12px;
+    }
+    .shift-row:last-child { border-bottom: none; }
+    .shift-site { font-weight: 600; min-width: 90px; color: #1f2328; }
+    .shift-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 10px;
+    }
+    .shift-gy   { background: #1f2328; color: #ffffff; }
+    .shift-am   { background: #fff3cd; color: #7a4800; border: 1px solid #e6a817; }
+
+    /* ── Footer ── */
+    .footer {
+      margin-top: 28px;
+      padding-top: 10px;
+      border-top: 1px solid #e5e7eb;
+      text-align: center;
+      font-size: 11px;
+      color: #57606a;
+    }
+    .footer strong { color: #1f2328; }
+
+    /* ── Print ── */
+    @media print {
+      body { background: #fff; font-size: 11px; }
+      .page { max-width: 100%; padding: 12px 14px; margin: 0; }
+      .two-col, .three-col { gap: 10px; }
+      .card { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ══════════ HEADER ══════════ -->
+  <div class="header">
+    <div class="header-left">
+      <h1>Jabra Floorwalk Checklist</h1>
+      <p>Progressive Web App (PWA) — Quick Reference &amp; Job Aid</p>
+      <div class="badge-row">
+        <span class="badge">PWA — Installable</span>
+        <span class="badge green">Android &amp; iOS</span>
+        <span class="badge dark">3 Sites · 41 Rooms</span>
+        <span class="badge dark">4 Tabs</span>
+      </div>
+    </div>
+    <div class="header-right" style="display:flex; align-items:center; gap:12px;">
+      <div style="text-align:right;">
+        <div class="doc-id">JA-JABRA-001</div>
+        <div>IBM Jabra Floorwalk Program</div>
+        <div>Onsite Inspection · Every Shift</div>
+      </div>
+      <img src="data:image/png;base64,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" alt="Jabra Floorwalk" style="width:52px;height:52px;border-radius:10px;flex-shrink:0;">
+    </div>
+  </div>
+
+  <!-- ══════════ ROW 1: Overview + Tabs + Shift Assignment ══════════ -->
+  <div class="two-col">
+
+    <!-- Overview -->
+    <div class="card">
+      <div class="card-header">Overview</div>
+      <div class="card-body">
+        <p style="font-size:12.5px; margin-bottom:8px;">
+          This app is used to inspect <strong>Jabra Speak</strong> huddle/meeting room devices every onsite shift across IBM office buildings. Each room is marked <strong style="color:#198754;">Good</strong> or <strong style="color:#dc3545;">Issue</strong> and submitted to the cloud database.
+        </p>
+        <div class="shift-row">
+          <span class="shift-site">1800 Building</span>
+          <span class="shift-badge shift-gy">GY Shift</span>
+          <span style="font-size:11px;color:#57606a;">Graveyard shift inspectors</span>
+        </div>
+        <div class="shift-row">
+          <span class="shift-site">UPA Building</span>
+          <span class="shift-badge shift-gy">GY Shift</span>
+          <span style="font-size:11px;color:#57606a;">Graveyard shift inspectors</span>
+        </div>
+        <div class="shift-row">
+          <span class="shift-site">NAGA Building</span>
+          <span class="shift-badge shift-am">AM Shift</span>
+          <span style="font-size:11px;color:#57606a;">Morning shift inspectors</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- App Tabs -->
+    <div class="card">
+      <div class="card-header grey">App Tabs</div>
+      <div class="card-body">
+        <div class="tab-row">
+          <div class="tab-chip">
+            ① CHECKLIST
+            <span>Run the room inspection</span>
+          </div>
+          <div class="tab-chip">
+            ② SETTINGS
+            <span>Cloud, inspectors, alerts</span>
+          </div>
+          <div class="tab-chip">
+            ③ DATA
+            <span>View &amp; manage records</span>
+          </div>
+          <div class="tab-chip">
+            ④ READ ME
+            <span>Guidelines &amp; reference</span>
+          </div>
+        </div>
+        <div class="callout" style="margin-top:10px;">
+          <strong>Auto-save:</strong> Draft is auto-saved — refreshing the page will <em>not</em> lose your in-progress checklist.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════ ROW 2: Step-by-Step + Status Reference ══════════ -->
+  <div class="two-col">
+
+    <!-- Step-by-Step -->
+    <div class="card">
+      <div class="card-header">Step-by-Step Inspection Workflow</div>
+      <div class="card-body">
+        <ol class="steps">
+          <li>
+            <div>
+              <strong>Open the app</strong> — tap the home screen icon if installed as a PWA, or navigate to the app URL in your browser.
+            </div>
+          </li>
+          <li>
+            <div>
+              Go to the <strong>CHECKLIST</strong> tab and select your <strong>building/site</strong> from the dropdown: <em>1800 / UPA / NAGA</em>.
+            </div>
+          </li>
+          <li>
+            <div>
+              Click <strong>"DATE NOW"</strong> to auto-populate today's date and current time.
+            </div>
+          </li>
+          <li>
+            <div>
+              Select your <strong>name</strong> from the Inspector dropdown.
+              <div class="note">⚠ Inspector name is required before submitting.</div>
+            </div>
+          </li>
+          <li>
+            <div>
+              For each room: tap <strong style="color:#198754;">✓ Good</strong> or <strong style="color:#dc3545;">✗ Issue</strong>.
+              <div class="note">All rooms must be checked before submitting.</div>
+            </div>
+          </li>
+          <li>
+            <div>
+              For <strong style="color:#dc3545;">Issue</strong> rooms: select a <strong>preset remark</strong> or type a custom note in the text field.
+            </div>
+          </li>
+          <li>
+            <div>
+              Click <strong>"SUBMIT DETAILS"</strong> when all rooms are checked.
+            </div>
+          </li>
+          <li>
+            <div>
+              <strong>Cloud sync</strong> happens automatically after submission. A <strong>reminder notification</strong> fires after the configured delay (default: 2 min) for any Remarked rooms.
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- Status Reference -->
+    <div class="card">
+      <div class="card-header green">Status Reference</div>
+      <div class="card-body">
+        <div class="status-row">
+          <span class="status-pill pill-good">✓ Good</span>
+          <div class="status-desc">
+            Device in good condition, proper position, locked — no action needed.
+            <ul>
+              <li>Jabra is in its designated spot</li>
+              <li>Device is locked/secured</li>
+              <li>No visible damage or battery issue</li>
+            </ul>
+          </div>
+        </div>
+        <div class="status-row">
+          <span class="status-pill pill-issue">✗ Issue</span>
+          <div class="status-desc">
+            Device requires attention — add a remark note.
+            <ul>
+              <li>Device displaced from normal position</li>
+              <li>Room occupied with no line of sight to Jabra</li>
+              <li>Battery low warning</li>
+              <li>Lock detached or missing</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <div style="font-size:11px;font-weight:700;color:#dc3545;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px;">Preset Remarks (Issue rooms)</div>
+          <div class="remark-item"><span class="remark-bullet"></span> Occupied but Jabra is visible</div>
+          <div class="remark-item"><span class="remark-bullet"></span> Occupied and no vision to Jabra</div>
+          <div class="remark-item"><span class="remark-bullet"></span> Locked but Jabra is visible</div>
+          <div class="remark-item"><span class="remark-bullet"></span> Other issue <em style="color:#57606a;">(specify in text field)</em></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════ ROW 3: Sites & Rooms (full width) ══════════ -->
+  <div class="full-width">
+    <div class="card">
+      <div class="card-header dark">Site &amp; Room Quick Reference <span style="font-weight:400;font-size:10px;opacity:0.8;margin-left:6px;">3 Sites · 41 Rooms Total</span></div>
+      <div class="card-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
+
+          <!-- 1800 -->
+          <div class="site-block">
+            <div class="site-name">1800 Building <span class="room-count-badge">20</span></div>
+
+            <div class="floor-row">
+              <span class="floor-label">Floor 5 (8 rooms)</span>
+            </div>
+            <div class="room-chips" style="margin-bottom:6px;">
+              <span class="chip">Turkesa</span><span class="chip">Pula</span><span class="chip">Lila</span><span class="chip">Kahel</span>
+              <span class="chip">Dilaw</span><span class="chip">Nila</span><span class="chip">Morado</span><span class="chip">Rosas</span>
+            </div>
+
+            <div class="floor-row">
+              <span class="floor-label">Floor 7 (6 rooms)</span>
+            </div>
+            <div class="room-chips" style="margin-bottom:6px;">
+              <span class="chip">Nasugbu</span><span class="chip">Florida Blanca</span><span class="chip">Tubbataha</span>
+              <span class="chip">Dumaguete</span><span class="chip">Baler</span><span class="chip">Amanpulo</span>
+            </div>
+
+            <div class="floor-row">
+              <span class="floor-label">Floor 8 (6 rooms)</span>
+            </div>
+            <div class="room-chips">
+              <span class="chip">Albaymeetrm</span><span class="chip">Elnido</span><span class="chip">Iloilo</span>
+              <span class="chip">Huma</span><span class="chip">Jolo</span><span class="chip">Boracay</span>
+            </div>
+          </div>
+
+          <!-- UPA -->
+          <div class="site-block">
+            <div class="site-name">UPA Building <span class="room-count-badge">16</span></div>
+
+            <div class="floor-row">
+              <span class="floor-label">UPAE Floor 3 (5)</span>
+            </div>
+            <div class="room-chips" style="margin-bottom:6px;">
+              <span class="chip">Baguio</span><span class="chip">Antique</span><span class="chip">Western Samar</span>
+              <span class="chip">Saranggani</span><span class="chip">Naga</span>
+            </div>
+
+            <div class="floor-row">
+              <span class="floor-label">UPAJ Ground (4)</span>
+            </div>
+            <div class="room-chips" style="margin-bottom:6px;">
+              <span class="chip">Design Thinking 1</span><span class="chip">Design Thinking 2</span>
+              <span class="chip">Design Thinking 3</span><span class="chip">Small Mtg Rm 1</span>
+            </div>
+
+            <div class="floor-row">
+              <span class="floor-label">UPAJ Floor 2 (3)</span>
+            </div>
+            <div class="room-chips" style="margin-bottom:6px;">
+              <span class="chip">Alugbati</span><span class="chip">Mirasol</span><span class="chip">Lumbang</span>
+            </div>
+
+            <div class="floor-row">
+              <span class="floor-label">UPAJ Floor 4 (2)</span>
+            </div>
+            <div class="room-chips" style="margin-bottom:6px;">
+              <span class="chip">Silang</span><span class="chip">Jacinto</span>
+            </div>
+
+            <div class="floor-row">
+              <span class="floor-label">UPAM Floor 2 (2)</span>
+            </div>
+            <div class="room-chips">
+              <span class="chip">Meeting Room 3</span><span class="chip">Medium Conf. Rm</span>
+            </div>
+          </div>
+
+          <!-- NAGA -->
+          <div class="site-block">
+            <div class="site-name">NAGA Building <span class="room-count-badge">5</span></div>
+
+            <div class="floor-row">
+              <span class="floor-label">NAGAB Floor 4 (5)</span>
+            </div>
+            <div class="room-chips">
+              <span class="chip">Magayon</span><span class="chip">Panganoron</span><span class="chip">Asog</span>
+              <span class="chip">Ticao</span><span class="chip">Calaguas</span>
+            </div>
+
+            <div style="margin-top:16px;padding:10px;background:#f4f6f9;border-radius:4px;border:1px solid #e5e7eb;">
+              <div style="font-size:11.5px;font-weight:700;color:#1f2328;margin-bottom:6px;">Site Summary</div>
+              <table style="width:100%;font-size:11.5px;border-collapse:collapse;">
+                <tr>
+                  <td style="padding:2px 0;color:#57606a;">1800 Building</td>
+                  <td style="padding:2px 0;font-weight:700;color:#0062ff;text-align:right;">20 rooms</td>
+                </tr>
+                <tr>
+                  <td style="padding:2px 0;color:#57606a;">UPA Building</td>
+                  <td style="padding:2px 0;font-weight:700;color:#0062ff;text-align:right;">16 rooms</td>
+                </tr>
+                <tr>
+                  <td style="padding:2px 0;color:#57606a;">NAGA Building</td>
+                  <td style="padding:2px 0;font-weight:700;color:#0062ff;text-align:right;">5 rooms</td>
+                </tr>
+                <tr style="border-top:1px solid #dde1e7;">
+                  <td style="padding:4px 0 0;font-weight:700;color:#1f2328;">Total</td>
+                  <td style="padding:4px 0 0;font-weight:700;color:#1f2328;text-align:right;">41 rooms</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ ROW 4: Settings + DATA Tab + Install ══════════ -->
+  <div class="three-col">
+
+    <!-- Settings -->
+    <div class="card">
+      <div class="card-header grey">Settings Overview</div>
+      <div class="card-body">
+        <div class="setting-row">
+          <span class="setting-key">Cloud Provider</span>
+          <span class="setting-val">Microsoft OneDrive (Power Automate Webhook) or Google Sheets (Apps Script Web App)</span>
+        </div>
+        <div class="setting-row">
+          <span class="setting-key">Web App URL</span>
+          <span class="setting-val">Endpoint URL for cloud sync submission</span>
+        </div>
+        <div class="setting-row">
+          <span class="setting-key">Direct DB Link</span>
+          <span class="setting-val">Quick-access link to the spreadsheet database</span>
+        </div>
+        <div class="setting-row">
+          <span class="setting-key">Inspector List</span>
+          <span class="setting-val">Add / remove inspectors (name + email) — syncs across all devices</span>
+        </div>
+        <div class="setting-row">
+          <span class="setting-key">Alert Delay</span>
+          <span class="setting-val">Minutes after submission before email alert fires <em>(default: 2 min)</em></span>
+        </div>
+        <div class="setting-row">
+          <span class="setting-key">Test Email Alert</span>
+          <span class="setting-val">Send a test email to verify webhook delivery is working</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DATA Tab -->
+    <div class="card">
+      <div class="card-header teal">DATA Tab</div>
+      <div class="card-body">
+        <p style="font-size:12px;margin-bottom:8px;color:#57606a;">View and manage all historical inspection records.</p>
+        <div class="setting-row">
+          <span class="setting-key">View Records</span>
+          <span class="setting-val">All historical inspection submissions</span>
+        </div>
+        <div class="setting-row">
+          <span class="setting-key">Filter</span>
+          <span class="setting-val">By date range and building/site</span>
+        </div>
+        <div class="setting-row">
+          <span class="setting-key">Export</span>
+          <span class="setting-val">Download records as CSV file</span>
+        </div>
+        <div class="setting-row">
+          <span class="setting-key">Cloud Sync</span>
+          <span class="setting-val">Pull latest data from cloud database</span>
+        </div>
+        <div class="setting-row">
+          <span class="setting-key">Edit / Delete</span>
+          <span class="setting-val">Modify or remove individual records</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Install Instructions -->
+    <div class="card">
+      <div class="card-header dark">Install as PWA</div>
+      <div class="card-body">
+        <div class="platform-header">
+          <span class="platform-badge">iOS</span>
+          Safari Only
+        </div>
+        <ol class="install-steps">
+          <li>Open the app URL in <strong>Safari</strong></li>
+          <li>Tap the <strong>Share</strong> button (box with ↑ arrow)</li>
+          <li>Tap <strong>"Add to Home Screen"</strong></li>
+          <li>Tap <strong>Add</strong> to confirm</li>
+        </ol>
+
+        <div style="height:10px;"></div>
+
+        <div class="platform-header">
+          <span class="platform-badge">Android</span>
+          Chrome
+        </div>
+        <ol class="install-steps">
+          <li>Open the app URL in <strong>Chrome</strong></li>
+          <li>Tap the <strong>install prompt</strong> (if shown) <em>or</em> Menu → <strong>"Add to Home Screen"</strong></li>
+          <li>Tap <strong>Install / Add</strong> to confirm</li>
+        </ol>
+
+        <div class="callout" style="margin-top:10px;">
+          Once installed, the app icon appears on your home screen for quick launch — no browser needed.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════ IMPORTANT NOTES ══════════ -->
+  <div class="full-width">
+    <div class="card">
+      <div class="card-header red">Important Notes &amp; Reminders</div>
+      <div class="card-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;">
+          <div>
+            <div style="font-size:11.5px;font-weight:700;color:#dc3545;margin-bottom:4px;">Before Submitting</div>
+            <ul style="font-size:12px;padding-left:16px;color:#1f2328;">
+              <li style="padding:2px 0;">All rooms must be marked Good <em>or</em> Issue</li>
+              <li style="padding:2px 0;">Inspector name must be selected</li>
+              <li style="padding:2px 0;">Issue rooms must have a remark note</li>
+            </ul>
+          </div>
+          <div>
+            <div style="font-size:11.5px;font-weight:700;color:#0062ff;margin-bottom:4px;">Auto-Save &amp; Sync</div>
+            <ul style="font-size:12px;padding-left:16px;color:#1f2328;">
+              <li style="padding:2px 0;">Draft is auto-saved — page refresh is safe</li>
+              <li style="padding:2px 0;">Cloud sync runs automatically after submit</li>
+              <li style="padding:2px 0;">Settings sync across all devices automatically</li>
+            </ul>
+          </div>
+          <div>
+            <div style="font-size:11.5px;font-weight:700;color:#198754;margin-bottom:4px;">Alerts &amp; Notifications</div>
+            <ul style="font-size:12px;padding-left:16px;color:#1f2328;">
+              <li style="padding:2px 0;">Email alert fires after configured delay (default 2 min)</li>
+              <li style="padding:2px 0;">Only Remarked (Issue) rooms trigger alerts</li>
+              <li style="padding:2px 0;">Use Settings → Test Email Alert to verify</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <div class="footer">
+    <strong>Jabra Floorwalk Checklist</strong> · IBM Onsite Inspection Program · Job Aid JA-JABRA-001<br>
+    <span style="margin-top:4px;display:inline-block;">Made with <strong>IBM Bob</strong></span>
+  </div>
+
+</div>
+</body>
+</html>
