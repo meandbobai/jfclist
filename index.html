@@ -899,6 +899,155 @@
       border-color: #dc2626;
       transform: scale(1.05);
     }
+
+    /* Update Log FAB */
+    .update-log-fab {
+      position: fixed;
+      bottom: max(20px, env(safe-area-inset-bottom, 20px));
+      left: 20px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #1e293b;
+      color: #ffffff;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.28);
+      z-index: 500;
+      transition: background 0.2s ease, transform 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .update-log-fab:hover {
+      background: #0f172a;
+      transform: scale(1.08);
+    }
+    .update-log-fab:active {
+      transform: scale(0.95);
+    }
+
+    /* Update Log Modal */
+    .update-log-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 9990;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 0;
+    }
+    @media (min-width: 640px) {
+      .update-log-overlay {
+        align-items: center;
+        padding: 1rem;
+      }
+    }
+    .update-log-sheet {
+      background: #ffffff;
+      width: 100%;
+      max-width: 560px;
+      border-radius: 16px 16px 0 0;
+      box-shadow: 0 -4px 32px rgba(0,0,0,0.18);
+      max-height: 82vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: slideUpSheet 0.22s ease;
+    }
+    @media (min-width: 640px) {
+      .update-log-sheet {
+        border-radius: 12px;
+        max-height: 80vh;
+        animation: fadeInSheet 0.18s ease;
+      }
+    }
+    @keyframes slideUpSheet {
+      from { transform: translateY(100%); opacity: 0; }
+      to   { transform: translateY(0);   opacity: 1; }
+    }
+    @keyframes fadeInSheet {
+      from { opacity: 0; transform: scale(0.97); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    .update-log-header {
+      padding: 1.1rem 1.25rem 0.85rem;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      background: #f8fafc;
+    }
+    .update-log-header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .update-log-icon-wrap {
+      width: 36px;
+      height: 36px;
+      background: #1e293b;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .update-log-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1f2328;
+      line-height: 1.2;
+    }
+    .update-log-subtitle {
+      font-size: 0.75rem;
+      color: #57606a;
+      margin-top: 1px;
+    }
+    .update-log-close {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      color: #57606a;
+      cursor: pointer;
+      padding: 0.2rem 0.4rem;
+      line-height: 1;
+      border-radius: 4px;
+      transition: background 0.15s;
+    }
+    .update-log-close:hover {
+      background: #f1f5f9;
+      color: #1f2328;
+    }
+    .update-log-body {
+      overflow-y: auto;
+      padding: 1.25rem;
+      flex: 1;
+    }
+    .update-log-version-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: #1e293b;
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      letter-spacing: 0.4px;
+      margin-bottom: 0.85rem;
+    }
+    .update-log-notes {
+      font-size: 0.875rem;
+      color: #1f2328;
+      white-space: pre-wrap;
+      line-height: 1.65;
+      font-family: inherit;
+      margin: 0;
+    }
   </style>
 </head>
 <body>
@@ -1152,6 +1301,32 @@
             </div>
           </div>
 
+          <!-- SECTION: APP UPDATE -->
+          <div class="settings-section">
+            <div class="settings-section-title">
+              <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              App Update
+            </div>
+
+            <div class="settings-row">
+              <div class="settings-label">
+                <strong>Open One Drive Folder (For Desktop only)</strong>
+                <p>For Desktop App user, click Open Updated Folder to download the updated Jabra Floorwalk Checklist.</p>
+              </div>
+              <div class="settings-control">
+                <div class="settings-input-row" style="gap:0.5rem; flex-wrap:wrap;">
+                  <input type="url" id="updateFolderUrl" class="meta-input"
+                    placeholder="https://ibm.sharepoint.com/sites/…/Shared%20Documents/…"
+                    style="flex:1; min-width:180px;">
+                  <button class="btn btn-settings-save" onclick="saveUpdateFolderUrl()" style="white-space:nowrap;">💾 Save</button>
+                  <button class="btn btn-settings-save" id="openFolderBtn" onclick="openUpdateFolder()"
+                    style="white-space:nowrap; background:#3b82d4; border-color:#3b82d4;">📂 Open Update Folder</button>
+                </div>
+                <div id="updateFolderStatus" style="margin-top:0.4rem; font-size:0.78rem; color:#57606a;"></div>
+              </div>
+            </div>
+          </div>
+
           <!-- SECTION: INSPECTOR LIST -->
           <div class="settings-section">
             <div class="settings-section-title">
@@ -1207,6 +1382,7 @@
                     <option value="">— Select Inspector —</option>
                   </select>
                   <button class="btn btn-settings-save" onclick="sendTestEmailAlert()" style="white-space:nowrap;">📧 Send Test Email</button>
+                  <button class="btn btn-sm btn-outline-primary" onclick="processPendingAlertsNow()" style="white-space:nowrap;" title="Send all pending alerts on Google Sheet immediately">⚡ Process Pending</button>
                   <button class="btn btn-sm btn-outline-secondary" onclick="debugScheduleAlert()" style="white-space:nowrap;" title="Test the full SCHEDULE_EMAIL_ALERT path with 0-minute delay">🔬 Debug Alert</button>
                 </div>
                 <div id="testEmailStatus" style="margin-top:0.5rem; font-size:0.82rem; color:#57606a;"></div>
@@ -1466,29 +1642,50 @@
         .setMimeType(ContentService.MimeType.JSON);
     }
 
-    // Handle Schedule Email Alert Action (fires 2 mins after submission, works when app is closed)
+    // Handle Process Pending Alerts Action
+    if (data.action === "PROCESS_PENDING_ALERTS") {
+      var processedCount = processPendingAlertEmails();
+      return ContentService.createTextOutput(JSON.stringify({ status: "processed", sentCount: processedCount }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // Handle Schedule Email Alert Action (fires in background, works when app is closed on any device)
     if (data.action === "SCHEDULE_EMAIL_ALERT" && data.recordId) {
+      var toEmail = data.toEmail || "";
+      var inspector = data.inspector || "";
+      var date = data.date || "";
+      var site = data.site || "";
+      var delayMinutes = Math.max(1, parseInt(data.delayMinutes || "2") || 1);
+      var alertId = Utilities.getUuid();
+      var fireAt = new Date(new Date().getTime() + delayMinutes * 60 * 1000);
+
+      var lock = LockService.getScriptLock();
+      lock.waitLock(20000);
       var alertSheet = ss.getSheetByName("Pending_Alerts");
       if (!alertSheet) {
         alertSheet = ss.insertSheet("Pending_Alerts");
-        alertSheet.appendRow(["Record_ID", "Inspector", "To_Email", "Date", "Remarked_Rooms", "Fire_At", "Sent"]);
-        alertSheet.getRange("A1:G1").setFontWeight("bold").setBackground("#e2e8f0");
+        alertSheet.appendRow(["Record_ID", "Inspector", "To_Email", "Date", "Remarked_Rooms", "Fire_At", "Status", "Sent_At", "Alert_ID", "Site"]);
+        alertSheet.getRange("A1:J1").setFontWeight("bold").setBackground("#e2e8f0");
       }
-      var fireAt = new Date(new Date().getTime() + (data.delayMinutes || 2) * 60 * 1000);
-      alertSheet.appendRow([
-        data.recordId,
-        data.inspector || "",
-        data.toEmail || "",
-        data.date || "",
-        JSON.stringify(data.remarkedRooms || []),
-        fireAt.toISOString(),
-        "NO"
-      ]);
-      // Create a one-time time-based trigger to fire in 2 minutes
-      ScriptApp.newTrigger("sendPendingAlertEmails")
+      var existingRows = alertSheet.getDataRange().getValues();
+      for (var er = 1; er < existingRows.length; er++) {
+        var rowStatus = existingRows[er][6] || existingRows[er][5] || "";
+        if (rowStatus === "PENDING" &&
+            (existingRows[er][0] === data.recordId || (site && String(existingRows[er][9] || existingRows[er][8]) === String(site)))) {
+          var statusCol = existingRows[er][6] ? 7 : 6;
+          alertSheet.getRange(er + 1, statusCol).setValue("SUPERSEDED");
+        }
+      }
+      alertSheet.appendRow([data.recordId, inspector, toEmail, date, JSON.stringify(data.remarkedRooms || []), fireAt.toISOString(), "PENDING", "", alertId, site]);
+      SpreadsheetApp.flush();
+      lock.releaseLock();
+
+      // Create a background time-based trigger
+      ScriptApp.newTrigger("processPendingAlertEmails")
         .timeBased()
-        .after((data.delayMinutes || 2) * 60 * 1000)
+        .after(delayMinutes * 60 * 1000)
         .create();
+
       return ContentService.createTextOutput(JSON.stringify({ status: "alert_scheduled", recordId: data.recordId }))
         .setMimeType(ContentService.MimeType.JSON);
     }
@@ -1499,8 +1696,11 @@
       if (alertSheet) {
         var aRows = alertSheet.getDataRange().getValues();
         for (var ar = aRows.length - 1; ar >= 1; ar--) {
-          if ((aRows[ar][0] === data.recordId || (data.site && String(aRows[ar][8]) === String(data.site))) && aRows[ar][6] === "PENDING") {
-            alertSheet.getRange(ar + 1, 7).setValue("CANCELLED");
+          var rowStatus = aRows[ar][6] || aRows[ar][5] || "";
+          var rowSite = aRows[ar][9] || aRows[ar][8] || "";
+          if ((aRows[ar][0] === data.recordId || (data.site && String(rowSite) === String(data.site))) && (rowStatus === "PENDING" || rowStatus === "NO")) {
+            var statusCol = aRows[ar][6] ? 7 : 6;
+            alertSheet.getRange(ar + 1, statusCol).setValue("CANCELLED");
           }
         }
       }
@@ -1546,118 +1746,80 @@ function doGet(e) {
       }
     }
 
-    // Handle SCHEDULE_EMAIL_ALERT — sleep on server then send directly (no trigger needed)
+    // Sweep and process any due pending alerts on any GET request
+    processPendingAlertEmails();
+
+    // Handle PROCESS_PENDING_ALERTS Action
+    if (params.action === "PROCESS_PENDING_ALERTS") {
+      var processedCount = processPendingAlertEmails();
+      return ContentService.createTextOutput(JSON.stringify({ status: "processed", sentCount: processedCount }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // Handle SCHEDULE_EMAIL_ALERT — registers alert and creates server-side background trigger
     if (params.action === "SCHEDULE_EMAIL_ALERT" && params.recordId) {
       var toEmail   = params.toEmail || "";
       var inspector = params.inspector || "";
       var date      = params.date || "";
-      var rooms     = [];
-      try { rooms = JSON.parse(params.remarkedRooms || "[]"); } catch(e) {}
-      var delayMinutes = Math.max(1, parseInt(params.delayMinutes || "2") || 1);
+      var site      = params.site || "";
+      var delayMinutes = parseInt(params.delayMinutes || "2");
+      if (isNaN(delayMinutes)) delayMinutes = 2;
 
       if (!toEmail) {
         return ContentService.createTextOutput(JSON.stringify({ status: "skipped", reason: "no_email" }))
           .setMimeType(ContentService.MimeType.JSON);
       }
 
-      // Register this alert as PENDING in Pending_Alerts. Any earlier PENDING alert for the same
-      // record OR the same site (a newer submission within the delay window) is marked SUPERSEDED,
-      // so only the latest alert is sent.
       var alertId = Utilities.getUuid();
-      var site = params.site || "";
+      var fireAt = new Date(new Date().getTime() + Math.max(0, delayMinutes) * 60 * 1000);
+
       var lock = LockService.getScriptLock();
-      lock.waitLock(30000);
+      lock.waitLock(20000);
       var alertSheet = ss.getSheetByName("Pending_Alerts");
       if (!alertSheet) {
         alertSheet = ss.insertSheet("Pending_Alerts");
-        alertSheet.appendRow(["Record_ID", "Inspector", "To_Email", "Date", "Remarked_Rooms", "Sent_At", "Status", "Alert_ID", "Site"]);
-        alertSheet.getRange("A1:I1").setFontWeight("bold").setBackground("#e2e8f0");
+        alertSheet.appendRow(["Record_ID", "Inspector", "To_Email", "Date", "Remarked_Rooms", "Fire_At", "Status", "Sent_At", "Alert_ID", "Site"]);
+        alertSheet.getRange("A1:J1").setFontWeight("bold").setBackground("#e2e8f0");
       }
       var existingRows = alertSheet.getDataRange().getValues();
       for (var er = 1; er < existingRows.length; er++) {
-        if (existingRows[er][6] === "PENDING" &&
-            (existingRows[er][0] === params.recordId || (site && String(existingRows[er][8]) === String(site)))) {
-          alertSheet.getRange(er + 1, 7).setValue("SUPERSEDED");
+        var rowStatus = existingRows[er][6] || existingRows[er][5] || "";
+        if (rowStatus === "PENDING" &&
+            (existingRows[er][0] === params.recordId || (site && String(existingRows[er][9] || existingRows[er][8]) === String(site)))) {
+          var statusCol = existingRows[er][6] ? 7 : 6;
+          alertSheet.getRange(er + 1, statusCol).setValue("SUPERSEDED");
         }
       }
-      alertSheet.appendRow([params.recordId, inspector, toEmail, date, params.remarkedRooms || "[]", "", "PENDING", alertId, site]);
+      alertSheet.appendRow([params.recordId, inspector, toEmail, date, params.remarkedRooms || "[]", fireAt.toISOString(), "PENDING", "", alertId, site]);
       SpreadsheetApp.flush();
       lock.releaseLock();
 
-      // Sleep for the delay duration, then check if THIS alert is still PENDING
-      Utilities.sleep(delayMinutes * 60 * 1000);
-
-      // Verify 1: Our own row must still be PENDING (not CANCELLED / SUPERSEDED)
-      var ownRow = -1;
-      var aRows = alertSheet.getDataRange().getValues();
-      for (var ar = aRows.length - 1; ar >= 1; ar--) {
-        if (aRows[ar][7] === alertId) { ownRow = ar + 1; break; }
-      }
-      if (ownRow < 0 || aRows[ownRow - 1][6] !== "PENDING") {
-        return ContentService.createTextOutput(JSON.stringify({ status: "cancelled_or_superseded" }))
-          .setMimeType(ContentService.MimeType.JSON);
+      if (delayMinutes <= 0) {
+        // Send immediately for 0-minute/debug requests
+        processPendingAlertEmails();
+      } else {
+        // Create server background trigger
+        ScriptApp.newTrigger("processPendingAlertEmails")
+          .timeBased()
+          .after(delayMinutes * 60 * 1000)
+          .create();
       }
 
-      // Verify 2: Check Floorwalk_Logs directly — if record was edited and now has 0 FAIL/Remarked rooms, abort email!
-      var logsSheet = ss.getSheetByName("Floorwalk_Logs");
-      if (logsSheet) {
-        var logRows = logsSheet.getDataRange().getValues();
-        var hasFailInLogs = false;
-        var recordFoundInLogs = false;
-        for (var lr = 1; lr < logRows.length; lr++) {
-          if (logRows[lr][0] === params.recordId) {
-            recordFoundInLogs = true;
-            if (logRows[lr][7] === "FAIL") {
-              hasFailInLogs = true;
-              break;
-            }
-          }
-        }
-        if (recordFoundInLogs && !hasFailInLogs) {
-          alertSheet.getRange(ownRow, 6, 1, 2).setValues([[new Date().toISOString(), "CANCELLED_EDITED_CLEAN"]]);
-          return ContentService.createTextOutput(JSON.stringify({ status: "cancelled_no_remarks_after_edit" }))
-            .setMimeType(ContentService.MimeType.JSON);
-        }
-      }
-
-      var roomList = rooms.map(function(r) {
-        return "  \u2022 " + r.spaceName + (r.remark ? ": " + r.remark : "");
-      }).join("\n");
-
-      var subject = "[Jabra Floorwalk] Remarked Rooms \u2013 " + date + " \u2013 " + inspector;
-      var body = "Hi " + inspector + ",\n\n"
-        + "This is an automated reminder that your inspection submitted on " + date
-        + " has " + rooms.length + " room(s) marked as Remarked that may require a recheck:\n\n"
-        + roomList + "\n\n"
-        + "Please review and recheck the above room(s) at your earliest convenience.\n\n"
-        + "Thank you,\nJabra Floorwalk Checklist";
-
-      // Mark SENT before mailing (under lock) so no other request can send for the same alert
-      lock.waitLock(30000);
-      var latest = alertSheet.getRange(ownRow, 7).getValue();
-      if (latest !== "PENDING") {
-        lock.releaseLock();
-        return ContentService.createTextOutput(JSON.stringify({ status: "cancelled_or_superseded" }))
-          .setMimeType(ContentService.MimeType.JSON);
-      }
-      alertSheet.getRange(ownRow, 6, 1, 2).setValues([[new Date().toISOString(), "SENT"]]);
-      SpreadsheetApp.flush();
-      lock.releaseLock();
-
-      MailApp.sendEmail({ to: toEmail, subject: subject, body: body });
-
-      return ContentService.createTextOutput(JSON.stringify({ status: "email_sent", to: toEmail }))
+      return ContentService.createTextOutput(JSON.stringify({ status: "alert_scheduled", recordId: params.recordId }))
         .setMimeType(ContentService.MimeType.JSON);
     }
 
-    // Handle CANCEL_EMAIL_ALERT — mark as cancelled in sheet so sleeping requests stop
+    // Handle CANCEL_EMAIL_ALERT — mark as cancelled in sheet
     if (params.action === "CANCEL_EMAIL_ALERT" && params.recordId) {
       var alertSheet = ss.getSheetByName("Pending_Alerts");
       if (alertSheet) {
         var aRows = alertSheet.getDataRange().getValues();
         for (var ar = aRows.length - 1; ar >= 1; ar--) {
-          if ((aRows[ar][0] === params.recordId || (params.site && String(aRows[ar][8]) === String(params.site))) && aRows[ar][6] === "PENDING") {
-            alertSheet.getRange(ar + 1, 7).setValue("CANCELLED");
+          var rowStatus = aRows[ar][6] || aRows[ar][5] || "";
+          var rowSite = aRows[ar][9] || aRows[ar][8] || "";
+          if ((aRows[ar][0] === params.recordId || (params.site && String(rowSite) === String(params.site))) && (rowStatus === "PENDING" || rowStatus === "NO")) {
+            var statusCol = aRows[ar][6] ? 7 : 6;
+            alertSheet.getRange(ar + 1, statusCol).setValue("CANCELLED");
           }
         }
       }
@@ -1753,6 +1915,120 @@ function doGet(e) {
   } catch (err) {
     return ContentService.createTextOutput(JSON.stringify({ error: err.toString() })).setMimeType(ContentService.MimeType.JSON);
   }
+}
+
+// Background Trigger & Scheduled Alert Processor (runs even when all browser tabs are closed)
+function sendPendingAlertEmails() {
+  processPendingAlertEmails();
+}
+
+function processPendingAlertEmails() {
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(20000)) return 0;
+  var sentCount = 0;
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var alertSheet = ss.getSheetByName("Pending_Alerts");
+    if (!alertSheet) return 0;
+
+    var aRows = alertSheet.getDataRange().getValues();
+    if (aRows.length <= 1) return 0;
+
+    var logsSheet = ss.getSheetByName("Floorwalk_Logs");
+    var logRows = logsSheet ? logsSheet.getDataRange().getValues() : [];
+    var now = new Date().getTime();
+
+    for (var ar = 1; ar < aRows.length; ar++) {
+      var row = aRows[ar];
+      var recordId = String(row[0] || "");
+      var inspector = String(row[1] || "");
+      var toEmail = String(row[2] || "");
+      var date = String(row[3] || "");
+      var remarkedRoomsStr = String(row[4] || "[]");
+      var fireAtVal = row[5];
+      var status = String(row[6] || "");
+
+      var statusCol = 7;
+      var sentAtCol = 8;
+      if (status !== "PENDING") {
+        if (row[5] === "NO" || row[5] === "PENDING") {
+          status = String(row[5]);
+          statusCol = 6;
+          sentAtCol = 7;
+        } else {
+          continue;
+        }
+      }
+
+      // Check if fire time has arrived (allow 5 sec clock tolerance)
+      if (fireAtVal && !isNaN(Date.parse(fireAtVal))) {
+        var fireAtTime = new Date(fireAtVal).getTime();
+        if (fireAtTime > now + 5000) {
+          continue;
+        }
+      }
+
+      if (!toEmail) {
+        alertSheet.getRange(ar + 1, statusCol).setValue("SKIPPED_NO_EMAIL");
+        continue;
+      }
+
+      // Check Floorwalk_Logs to verify if record was edited and now has 0 FAIL/Remarked rooms
+      var hasFailInLogs = false;
+      var recordFoundInLogs = false;
+      for (var lr = 1; lr < logRows.length; lr++) {
+        if (String(logRows[lr][0]) === recordId) {
+          recordFoundInLogs = true;
+          if (String(logRows[lr][7]).toUpperCase() === "FAIL") {
+            hasFailInLogs = true;
+            break;
+          }
+        }
+      }
+      if (recordFoundInLogs && !hasFailInLogs) {
+        alertSheet.getRange(ar + 1, statusCol).setValue("CANCELLED_EDITED_CLEAN");
+        if (sentAtCol <= alertSheet.getLastColumn()) alertSheet.getRange(ar + 1, sentAtCol).setValue(new Date().toISOString());
+        continue;
+      }
+
+      var rooms = [];
+      try { rooms = JSON.parse(remarkedRoomsStr || "[]"); } catch(e) {}
+      var roomList = rooms.map(function(r) {
+        return "  \u2022 " + (r.spaceName || r) + (r.remark ? ": " + r.remark : "");
+      }).join("\n");
+
+      var subject = "[Jabra Floorwalk] Remarked Rooms \u2013 " + date + " \u2013 " + inspector;
+      var body = "Hi " + inspector + ",\n\n"
+        + "This is an automated reminder that your inspection submitted on " + date
+        + " has " + rooms.length + " room(s) marked as Remarked that may require a recheck:\n\n"
+        + roomList + "\n\n"
+        + "Please review and recheck the above room(s) at your earliest convenience.\n\n"
+        + "Thank you,\nJabra Floorwalk Checklist";
+
+      try {
+        MailApp.sendEmail({ to: toEmail, subject: subject, body: body });
+        alertSheet.getRange(ar + 1, statusCol).setValue("SENT");
+        if (sentAtCol <= alertSheet.getLastColumn()) alertSheet.getRange(ar + 1, sentAtCol).setValue(new Date().toISOString());
+        sentCount++;
+      } catch(err) {
+        alertSheet.getRange(ar + 1, statusCol).setValue("ERROR: " + err.toString().substring(0, 60));
+      }
+    }
+    SpreadsheetApp.flush();
+
+    // Clean up expired triggers
+    var triggers = ScriptApp.getProjectTriggers();
+    for (var t = 0; t < triggers.length; t++) {
+      var fn = triggers[t].getHandlerFunction();
+      if (fn === "sendPendingAlertEmails" || fn === "processPendingAlertEmails") {
+        try { ScriptApp.deleteTrigger(triggers[t]); } catch(e) {}
+      }
+    }
+  } catch(e) {
+  } finally {
+    lock.releaseLock();
+  }
+  return sentCount;
 }</div>
 
             <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
@@ -1830,6 +2106,14 @@ function doGet(e) {
                 <label for="recordSearchEndDate" style="font-size:0.78rem; font-weight:600; color:var(--text-muted);">To:</label>
                 <input type="date" id="recordSearchEndDate" class="meta-input" style="width:auto; padding:0.4rem 0.6rem; font-size:0.85rem;" onchange="onDateRangeChange()" title="End Date">
               </div>
+              <div style="display:flex; align-items:center; gap:0.4rem;">
+                <select id="quickDatePreset" class="meta-input" style="padding:0.4rem 0.6rem; font-size:0.85rem;" onchange="setQuickDateFilter(this.value)" title="Quick date filter">
+                  <option value="">Quick Filter…</option>
+                  <option value="today">Today</option>
+                  <option value="yesterday">Yesterday</option>
+                  <option value="lastweek">Last Week</option>
+                </select>
+              </div>
               <div style="display:flex; align-items:center; gap:0.4rem; flex:1; min-width:180px; max-width:260px;">
                 <select id="recordSearchBuilding" class="meta-input" style="width:100%; padding:0.4rem 0.6rem; font-size:0.85rem;" onchange="onDateRangeChange()" title="Filter by Building">
                   <option value="">All Buildings</option>
@@ -1903,40 +2187,52 @@ function doGet(e) {
             <li><strong>OPEN DATA:</strong> Displays and manages historical inspection submissions with full audit trail.</li>
           </ul>
 
-          <!-- Version & Update Notes Section -->
-          <h3 style="font-size:1rem; margin-top:1.5rem; margin-bottom:0.75rem; font-weight:700; display:flex; align-items:center; gap:0.4rem;">
-            <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-            Version &amp; Update Notes
-          </h3>
-          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1.25rem;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.75rem;">
-              <div>
-                <label style="font-size:0.85rem; font-weight:700; color:var(--text-dark); display:block; margin-bottom:0.25rem;">App Version Editor</label>
-                <p style="font-size:0.78rem; color:var(--text-muted); margin:0;">Edit the current version (updates header badge, cloud database, and email subject).</p>
-              </div>
-              <div style="display:flex; align-items:center; gap:0.5rem;">
-                <input type="text" id="appVersionInput" class="meta-input" placeholder="1.0.1" style="max-width:140px; font-weight:700;">
-              </div>
-            </div>
-
-            <div>
-              <label style="font-size:0.85rem; font-weight:700; color:var(--text-dark); display:block; margin-bottom:0.25rem;">Changelog / Release Notes</label>
-              <p style="font-size:0.78rem; color:var(--text-muted); margin:0 0 0.5rem 0;">Document version notes, changes, and updates for this release.</p>
-              <textarea id="appReleaseNotes" class="meta-input" rows="5" style="width:100%; font-family:inherit; font-size:0.85rem; line-height:1.5; resize:vertical;" placeholder="- Added Naga room name updates (Magayon, Panganoron, Asog, Ticao, Calaguas)&#10;- Collapsible setup guide in settings&#10;- Bug fixes &amp; performance improvements"></textarea>
-            </div>
-
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.75rem; flex-wrap:wrap; gap:0.5rem;">
-              <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-                <button class="btn btn-sm btn-primary" onclick="saveAndSyncVersion(true)">Update Version</button>
-                <button class="btn btn-sm btn-outline-secondary" onclick="sendVersionEmail()">✉️ Send Email with Update Notes</button>
-              </div>
-              <span id="versionNotesStatus" style="font-size:0.75rem; color:var(--text-muted);"></span>
-            </div>
-          </div>
         </div>
       </div>
     </div>
 
+  </div>
+
+  <!-- Update Log FAB (lower-left) -->
+  <button class="update-log-fab" onclick="openUpdateLog()" title="View Update Log / Changelog" aria-label="View update changelog">
+    <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+      <line x1="16" y1="13" x2="8" y2="13"/>
+      <line x1="16" y1="17" x2="8" y2="17"/>
+      <polyline points="10 9 9 9 8 9"/>
+    </svg>
+  </button>
+
+  <!-- Update Log Modal (bottom sheet on mobile, centered dialog on desktop) -->
+  <div class="update-log-overlay" id="updateLogOverlay" onclick="if(event.target===this) closeUpdateLog()">
+    <div class="update-log-sheet" role="dialog" aria-modal="true" aria-labelledby="updateLogTitle">
+      <div class="update-log-header">
+        <div class="update-log-header-left">
+          <div class="update-log-icon-wrap" aria-hidden="true">
+            <svg width="18" height="18" fill="none" stroke="#fff" viewBox="0 0 24 24" stroke-width="2.2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+          </div>
+          <div>
+            <div class="update-log-title" id="updateLogTitle">Update Log</div>
+            <div class="update-log-subtitle" id="updateLogSubtitle">Jabra Floorwalk Checklist</div>
+          </div>
+        </div>
+        <button class="update-log-close" onclick="closeUpdateLog()" aria-label="Close update log">&times;</button>
+      </div>
+      <div class="update-log-body">
+        <div class="update-log-version-badge" id="updateLogVersionBadge">
+          <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <span id="updateLogVersionText">v1.2.0</span>
+        </div>
+        <pre class="update-log-notes" id="updateLogNotes"></pre>
+      </div>
+    </div>
   </div>
 
   <!-- Notification Toast -->
@@ -2704,6 +3000,7 @@ function doGet(e) {
       ROOMS_DATA = SITE_ROOMS[currentSite] || [];
 
       loadGoogleSheetConfig();
+      loadUpdateFolderUrl();
       loadAppVersionAndNotes();
       populateInspectorDropdown();
       renderInspectorSettings();
@@ -2732,7 +3029,7 @@ function doGet(e) {
     }
 
     function getGoogleSheetUrl() {
-      return (localStorage.getItem('jabra_gsheet_url') || 'https://script.google.com/macros/s/AKfycbz5iaVtOKWLH1d9e2XwcCko256tXfI6GYZ8gTFs-duf0WM4zxXIQM7--zhY7uIAejH13Q/exec').trim();
+      return (localStorage.getItem('jabra_gsheet_url') || 'https://script.google.com/macros/s/AKfycbwUNnnDpGzUo4rkVJYmnLrIEUqL2zhPtc9vl40eQ1an-qeBb81Qygvf5kvULFw9q5V6tw/exec').trim();
     }
 
     function onDbProviderChange(provider) {
@@ -2876,6 +3173,57 @@ function doGet(e) {
       syncSettingsToSheet();
     }
 
+    // ── OneDrive Update Folder ────────────────────────────────────────────
+    const UPDATE_FOLDER_KEY = 'jabra_update_folder_url';
+    const UPDATE_FOLDER_DEFAULT = 'https://ibm-my.sharepoint.com/shared?id=%2Fpersonal%2Fanselmo%5Ftang%2Do%5Fibm%5Fcom%2FDocuments%2FTelephony%20Files%2FJABRA%2FFloorwalk%2FFloorwalk%20Checklist&listurl=%2Fpersonal%2Fanselmo%5Ftang%2Do%5Fibm%5Fcom%2FDocuments';
+    const UPDATE_FOLDER_ALLOWED_HOSTS = ['sharepoint.com', 'onedrive.live.com', 'onedrive.com', '1drv.ms', 'ibm-my.sharepoint.com'];
+
+    function parseUpdateFolderUrl(raw) {
+      try {
+        const u = new URL(raw);
+        if (u.protocol !== 'https:') return null;
+        const ok = UPDATE_FOLDER_ALLOWED_HOSTS.some(h => u.hostname === h || u.hostname.endsWith('.' + h));
+        return ok ? u : null;
+      } catch (e) { return null; }
+    }
+
+    function loadUpdateFolderUrl() {
+      const input = document.getElementById('updateFolderUrl');
+      if (input) input.value = localStorage.getItem(UPDATE_FOLDER_KEY) || UPDATE_FOLDER_DEFAULT;
+    }
+
+    function saveUpdateFolderUrl() {
+      const input = document.getElementById('updateFolderUrl');
+      const status = document.getElementById('updateFolderStatus');
+      const val = input.value.trim();
+      if (!val) {
+        localStorage.removeItem(UPDATE_FOLDER_KEY);
+        status.textContent = '';
+        showToast('Update folder link cleared.');
+        return;
+      }
+      if (!parseUpdateFolderUrl(val)) {
+        status.textContent = '❌ Enter a valid https OneDrive / SharePoint link.';
+        return;
+      }
+      localStorage.setItem(UPDATE_FOLDER_KEY, val);
+      status.textContent = '✓ Folder link saved.';
+      showToast('Update folder link saved.');
+    }
+
+    function openUpdateFolder() {
+      const status = document.getElementById('updateFolderStatus');
+      const raw = (localStorage.getItem(UPDATE_FOLDER_KEY) || UPDATE_FOLDER_DEFAULT).trim();
+      const u = raw ? parseUpdateFolderUrl(raw) : null;
+      if (!u) {
+        status.textContent = '⚠️ Save a valid OneDrive / SharePoint folder link first.';
+        return;
+      }
+      window.open(u.toString(), '_blank', 'noopener,noreferrer');
+      status.textContent = 'Update folder opened. Download the latest Jabra Floorwalk Checklist.';
+    }
+    // ── End OneDrive Update Folder ────────────────────────────────────────
+
     async function syncSettingsToSheet() {
       const url = getGoogleSheetUrl();
       if (!url) return;
@@ -2911,7 +3259,17 @@ function doGet(e) {
       });
     }
 
-    // Embedded changelog — update this alongside the version number in the HTML header
+    // ─────────────────────────────────────────────────────────────────────────
+    // VERSION & CHANGELOG — auto-sync on every new file deployment
+    //
+    // HOW TO UPDATE:
+    //   1. Bump APP_VERSION below (e.g. "1.3.0")
+    //   2. Add the new entry at the TOP of EMBEDDED_RELEASE_NOTES
+    //   That's it — on first load the app detects the change, saves locally,
+    //   pushes to Google Sheet, and shows the new log in the FAB modal.
+    // ─────────────────────────────────────────────────────────────────────────
+    const APP_VERSION = '1.2.0'; // ← bump this for every new release
+
     const EMBEDDED_RELEASE_NOTES = `v1.2.0 — What's New
 
 [Huddle Room Management]
@@ -2937,117 +3295,74 @@ function doGet(e) {
 - Settings: appsscript.json manifest snippet with all required OAuth scopes
 
 [System]
-- Version auto-increments to 1.2.0 and silently syncs to cloud
+- Update Log FAB: floating changelog button on every page (lower-left)
+- Version & notes now auto-sync to cloud on every new deployment
 - Performance and responsiveness enhancements`;
 
-    // Bump this key whenever EMBEDDED_RELEASE_NOTES changes — forces notes to refresh
+    // Internal key — auto-derived from APP_VERSION, no manual bump needed
     const NOTES_VERSION_KEY = 'jabra_notes_version';
-    const EMBEDDED_NOTES_VERSION = '1.2.0-r1'; // change alongside EMBEDDED_RELEASE_NOTES
 
     function loadAppVersionAndNotes() {
       const headerVer = document.getElementById('headerAppVersion');
-      const inputVer = document.getElementById('appVersionInput');
 
-      // The version embedded in the HTML is always the authoritative source.
-      const embeddedVersion = headerVer ? headerVer.innerText.trim() : '1.1.1';
+      // APP_VERSION constant is always the authoritative source for this build.
+      const embeddedVersion = APP_VERSION;
       const savedVersion = localStorage.getItem('jabra_app_version') || '';
+
+      // Detect a new deployment: version changed OR notes for this version not yet stored
       const savedNotesVer = localStorage.getItem(NOTES_VERSION_KEY) || '';
+      const isNewVersion = embeddedVersion !== savedVersion;
+      const isNewNotes   = savedNotesVer !== embeddedVersion;
 
-      // Update version if changed
-      if (embeddedVersion !== savedVersion) {
+      if (isNewVersion || isNewNotes) {
+        // Persist new version + notes locally
         localStorage.setItem('jabra_app_version', embeddedVersion);
-        saveAndSyncVersion(false);
-      }
-
-      // Always refresh notes if notes version doesn't match
-      if (savedNotesVer !== EMBEDDED_NOTES_VERSION) {
         localStorage.setItem('jabra_app_release_notes', EMBEDDED_RELEASE_NOTES);
-        localStorage.setItem(NOTES_VERSION_KEY, EMBEDDED_NOTES_VERSION);
+        localStorage.setItem(NOTES_VERSION_KEY, embeddedVersion);
+        // Push to cloud silently
+        syncVersionToCloud(embeddedVersion, EMBEDDED_RELEASE_NOTES);
       }
 
       if (headerVer) headerVer.innerText = embeddedVersion;
-      if (inputVer) inputVer.value = embeddedVersion;
-
-      const notes = localStorage.getItem('jabra_app_release_notes') || EMBEDDED_RELEASE_NOTES;
-      const notesArea = document.getElementById('appReleaseNotes');
-      if (notesArea) notesArea.value = notes;
     }
 
-    function saveAppVersion(showToastMessage = false) {
-      const inputVer = document.getElementById('appVersionInput');
-      const headerVer = document.getElementById('headerAppVersion');
-      const ver = (inputVer && inputVer.value ? inputVer.value : (headerVer ? headerVer.innerText : '1.0.1')).trim();
-      
-      localStorage.setItem('jabra_app_version', ver);
-      if (headerVer) headerVer.innerText = ver;
-      if (inputVer) inputVer.value = ver;
-      if (showToastMessage) {
-        showToast(`App Version updated to ${ver}`);
-      }
-    }
-
-    async function saveAndSyncVersion(showToastMessage = true) {
-      // 1. Update & save version locally
-      const inputVer = document.getElementById('appVersionInput');
-      const headerVer = document.getElementById('headerAppVersion');
-      const ver = (inputVer && inputVer.value ? inputVer.value : (headerVer ? headerVer.innerText : '1.0.1')).trim();
-      
-      localStorage.setItem('jabra_app_version', ver);
-      if (headerVer) headerVer.innerText = ver;
-      if (inputVer) inputVer.value = ver;
-
-      // 2. Save notes locally
-      const notesArea = document.getElementById('appReleaseNotes');
-      const notes = (notesArea ? notesArea.value : '').trim();
-      localStorage.setItem('jabra_app_release_notes', notes);
-
-      const statusSpan = document.getElementById('versionNotesStatus');
-      if (statusSpan) {
-        statusSpan.innerText = 'Saved ✓';
-        setTimeout(() => { if (statusSpan) statusSpan.innerText = ''; }, 2500);
-      }
-
-      // 3. Sync to Google Sheets cloud
+    async function syncVersionToCloud(ver, notes) {
       const url = getGoogleSheetUrl();
-      if (!url) {
-        if (showToastMessage) showToast(`✓ Version ${ver} & notes saved locally (Configure Sheet in Settings to sync to cloud)`);
-        return;
-      }
-
-      const payload = {
-        action: "SYNC_APP_VERSION",
-        version: ver,
-        notes: notes,
-        timestamp: new Date().toISOString()
-      };
-
+      if (!url) return;
       try {
         await fetch(url, {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+          body: JSON.stringify({
+            action: 'SYNC_APP_VERSION',
+            version: ver,
+            notes: notes,
+            timestamp: new Date().toISOString()
+          })
         });
-        if (showToastMessage) showToast(`✓ Version ${ver} & notes saved and synced to Google Sheet!`);
-      } catch (err) {
-        if (showToastMessage) showToast(`✓ Version ${ver} saved locally (Could not reach cloud).`);
-      }
+      } catch (e) { /* silent — offline or unreachable */ }
     }
 
-    function saveAppReleaseNotes(showToastMessage = false) {
-      return saveAndSyncVersion(showToastMessage);
+    // Kept for backward compat (called by old references)
+    async function saveAndSyncVersion(showToastMessage = false) {
+      const ver = APP_VERSION;
+      const notes = localStorage.getItem('jabra_app_release_notes') || EMBEDDED_RELEASE_NOTES;
+      localStorage.setItem('jabra_app_version', ver);
+      localStorage.setItem('jabra_app_release_notes', notes);
+      const headerVer = document.getElementById('headerAppVersion');
+      if (headerVer) headerVer.innerText = ver;
+      await syncVersionToCloud(ver, notes);
+      if (showToastMessage) showToast(`✓ Version ${ver} & notes synced.`);
     }
 
-    function syncVersionToGoogleSheet(manual = true) {
-      return saveAndSyncVersion(manual);
-    }
+    function saveAppVersion(showToastMessage = false) { /* no-op — version is set by APP_VERSION constant */ }
+    function saveAppReleaseNotes(showToastMessage = false) { /* no-op */ }
+    function syncVersionToGoogleSheet(manual = true) { return saveAndSyncVersion(manual); }
 
     function sendVersionEmail() {
-      const headerVer = document.getElementById('headerAppVersion');
-      const inputVer = document.getElementById('appVersionInput');
-      const version = (inputVer && inputVer.value ? inputVer.value : (headerVer ? headerVer.innerText : '1.0.1')).trim();
-      const notesArea = document.getElementById('appReleaseNotes');
-      const notes = (notesArea ? notesArea.value : '').trim();
+      const version = APP_VERSION;
+      const notes = (localStorage.getItem('jabra_app_release_notes') || EMBEDDED_RELEASE_NOTES).trim();
 
       const subject = encodeURIComponent(`Jabra Floorwalk Checklist - Version ${version} Update`);
       
@@ -3237,7 +3552,7 @@ function doGet(e) {
             <select class="preset-dropdown" onchange="onPresetChange('${safeRoomId}', this.value)">
               ${selectOptionsHtml}
             </select>
-            <input type="text" class="table-input" id="remark-input-${safeRoomId}" placeholder="Add remarks / notes..." value="${escapeHtml(state.customRemark)}" oninput="onRemarkChange('${safeRoomId}', this.value)">
+            <input type="text" class="table-input" id="remark-input-${safeRoomId}" placeholder="${state.presetRemark === 'Other issue (Specify in text)' ? 'If the remarks need high attention, put an asterisk (*)' : 'If the remarks need high attention, put an asterisk (*)'}" value="${escapeHtml(state.customRemark)}" oninput="onRemarkChange('${safeRoomId}', this.value)">
           </td>
           <td>
             <span id="timestamp-${safeRoomId}" style="font-size:0.8rem; color:var(--text-muted); font-family:monospace;">
@@ -3318,13 +3633,23 @@ function doGet(e) {
         checklistState[roomId] = { status: null, timestamp: '', presetRemark: '', customRemark: '' };
       }
       checklistState[roomId].presetRemark = value;
+      const input = document.getElementById(`remark-input-${roomId}`);
       if (value) {
-        checklistState[roomId].customRemark = value;
-        const input = document.getElementById(`remark-input-${roomId}`);
-        if (input) input.value = value;
-        
-        // When any preset remark is selected, automatically mark the status as Issue (FAIL)
+        const isOther = value === 'Other issue (Specify in text)';
+        if (isOther) {
+          checklistState[roomId].customRemark = '';
+        } else {
+          checklistState[roomId].customRemark = value;
+        }
+        // setRowStatus triggers renderTable which rebuilds the DOM, destroying any
+        // focus set before it. Focus must be applied after the render via setTimeout.
         setRowStatus(roomId, 'FAIL');
+        if (isOther) {
+          setTimeout(() => {
+            const freshInput = document.getElementById(`remark-input-${roomId}`);
+            if (freshInput) freshInput.focus();
+          }, 0);
+        }
       }
       saveDraft();
     }
@@ -3587,13 +3912,20 @@ function doGet(e) {
             const syncedRecords = [];
             recordsArray.forEach(r => {
               if (r && r.id) {
-                let p = 0, iss = 0;
+                let p = 0, iss = 0, yel = 0, red = 0;
                 (r.details || []).forEach(d => {
                   if (d.status === 'PASS') p++;
-                  else if (d.status === 'FAIL') iss++;
+                  else if (d.status === 'FAIL') {
+                    iss++;
+                    const sev = getSeverity(d.status, d.remark);
+                    if (sev === 'yellow') yel++;
+                    else if (sev === 'red') red++;
+                  }
                 });
                 r.passedCount = p;
                 r.issueCount = iss;
+                r.yellowCount = yel;
+                r.redCount = red;
                 syncedRecords.push(r);
               }
             });
@@ -3722,6 +4054,8 @@ function doGet(e) {
 
       let checkedCount = 0;
       let issueCount = 0;
+      let yellowCount = 0;
+      let redCount = 0;
       let missingRemarkRooms = [];
       const details = [];
 
@@ -3734,7 +4068,12 @@ function doGet(e) {
             missingRemarkRooms.push(`${room.spaceName} (Floor ${room.floor})`);
           }
         }
-        if (st.status === 'FAIL') issueCount++;
+        if (st.status === 'FAIL') {
+          issueCount++;
+          const sev = getSeverity(st.status, st.customRemark);
+          if (sev === 'yellow') yellowCount++;
+          else if (sev === 'red') redCount++;
+        }
 
         details.push({
           building: room.building,
@@ -3780,6 +4119,8 @@ function doGet(e) {
         totalRooms: ROOMS_DATA.length,
         checkedCount: checkedCount,
         issueCount: issueCount,
+        yellowCount: yellowCount,
+        redCount: redCount,
         passedCount: checkedCount - issueCount,
         submittedAt: new Date().toISOString(),
         details: details
@@ -3872,6 +4213,38 @@ function doGet(e) {
       dateFilterEnd = endElem ? endElem.value : '';
       buildingFilterQuery = buildingElem ? buildingElem.value.trim().toLowerCase() : '';
 
+      // Reset quick-filter dropdown when user manually edits dates
+      const presetElem = document.getElementById('quickDatePreset');
+      if (presetElem) presetElem.value = '';
+
+      renderSavedRecords();
+    }
+
+    function setQuickDateFilter(preset) {
+      if (!preset) return;
+      const now = new Date();
+      const todayISO = now.toLocaleDateString('en-CA'); // YYYY-MM-DD in local time
+      let start = '', end = '';
+      if (preset === 'today') {
+        start = todayISO;
+        end = todayISO;
+      } else if (preset === 'yesterday') {
+        const yest = new Date(now);
+        yest.setDate(yest.getDate() - 1);
+        start = yest.toLocaleDateString('en-CA');
+        end = start;
+      } else if (preset === 'lastweek') {
+        const week = new Date(now);
+        week.setDate(week.getDate() - 6);
+        start = week.toLocaleDateString('en-CA');
+        end = todayISO;
+      }
+      const startElem = document.getElementById('recordSearchStartDate');
+      const endElem = document.getElementById('recordSearchEndDate');
+      if (startElem) startElem.value = start;
+      if (endElem) endElem.value = end;
+      dateFilterStart = start;
+      dateFilterEnd = end;
       renderSavedRecords();
     }
 
@@ -3882,9 +4255,11 @@ function doGet(e) {
       const startElem = document.getElementById('recordSearchStartDate');
       const endElem = document.getElementById('recordSearchEndDate');
       const buildingElem = document.getElementById('recordSearchBuilding');
+      const presetElem = document.getElementById('quickDatePreset');
       if (startElem) startElem.value = '';
       if (endElem) endElem.value = '';
       if (buildingElem) buildingElem.value = '';
+      if (presetElem) presetElem.value = '';
       renderSavedRecords();
     }
 
@@ -4040,6 +4415,18 @@ function doGet(e) {
 
         const recId = rec.id;
 
+        let yellowCount = 0;
+        let redCount = 0;
+        (rec.details || []).forEach(d => {
+          const sev = getSeverity(d.status, d.remark);
+          if (sev === 'yellow') yellowCount++;
+          else if (sev === 'red') redCount++;
+        });
+        if (yellowCount === 0 && redCount === 0) {
+          yellowCount = rec.yellowCount || 0;
+          redCount = rec.redCount || (rec.issueCount || 0);
+        }
+
         card.innerHTML = `
           <div class="record-header">
             <div>
@@ -4050,7 +4437,8 @@ function doGet(e) {
             </div>
             <div style="display:flex; gap:0.5rem; align-items:center;">
               <button class="pill-badge pill-success pill-sort-btn" style="border:none;cursor:pointer;" onclick="sortCardDetails('${recId}','PASS')" title="Click to show Passed rooms first">${rec.passedCount || 0} Passed</button>
-              ${(rec.issueCount && rec.issueCount > 0) ? `<button class="pill-badge pill-sort-btn" style="background:#fee2e2;color:#991b1b;border:none;cursor:pointer;" onclick="sortCardDetails('${recId}','FAIL')" title="Click to show Remarked rooms first">${rec.issueCount} Remarked</button>` : ''}
+              ${yellowCount > 0 ? `<button class="pill-badge pill-warning pill-sort-btn" style="border:none;cursor:pointer;" onclick="sortCardDetails('${recId}','YELLOW')" title="Click to show Yellow Remarked rooms first">${yellowCount} Remarked</button>` : ''}
+              ${redCount > 0 ? `<button class="pill-badge pill-danger pill-sort-btn" style="border:none;cursor:pointer;" onclick="sortCardDetails('${recId}','RED')" title="Click to show Red Remarked rooms first">${redCount} Remarked</button>` : ''}
               <button class="btn btn-sm btn-outline-primary" onclick="editRecord('${recId}')" title="Load into checklist to edit or recheck">✏️ Edit / Recheck</button>
               <button class="btn btn-sm btn-outline-danger" onclick="deleteRecord('${recId}')">Delete</button>
             </div>
@@ -4105,7 +4493,12 @@ function doGet(e) {
           const order = { PASS: 0, FAIL: 1, UNCHECKED: 2 };
           return (order[a.status] ?? 2) - (order[b.status] ?? 2);
         });
-      } else if (sortMode === 'FAIL') {
+      } else if (sortMode === 'YELLOW') {
+        // Sort by colour: yellow first, then red, then green, then unchecked
+        const colourOrder = { yellow: 0, red: 1, green: 2 };
+        const rank = d => colourOrder[getSeverity(d.status, d.remark)] ?? 3;
+        sorted = [...details].sort((a, b) => rank(a) - rank(b));
+      } else if (sortMode === 'FAIL' || sortMode === 'RED') {
         // Sort by colour: red first, then yellow, then green, then unchecked
         const colourOrder = { red: 0, yellow: 1, green: 2 };
         const rank = d => colourOrder[getSeverity(d.status, d.remark)] ?? 3;
@@ -4145,7 +4538,11 @@ function doGet(e) {
       renderCardTbody(recId, details, newSort);
       showToast(newSort === 'all'
         ? 'Showing all rooms (original order)'
-        : `Sorted: ${newSort === 'PASS' ? 'Passed' : 'Red → Yellow → Green'}`);
+        : (newSort === 'PASS'
+          ? 'Sorted: Passed rooms first'
+          : (newSort === 'YELLOW'
+            ? 'Sorted: Yellow Remarked rooms first'
+            : 'Sorted: Red Remarked rooms first')));
     }
 
     function editRecord(recId) {
@@ -4566,6 +4963,29 @@ function doGet(e) {
       if (statusEl) statusEl.innerHTML = `<span style="color:#57606a;">🔗 Opened in new tab — read the response shown there, then check <strong>${escapeHtml(toEmail)}</strong> inbox.</span>`;
     }
 
+    function processPendingAlertsNow() {
+      const statusEl = document.getElementById('testEmailStatus');
+      const url = getGoogleSheetUrl();
+      if (!url) {
+        if (statusEl) statusEl.innerHTML = '<span style="color:#dc2626;">⚠️ No webhook URL configured.</span>';
+        return;
+      }
+      if (statusEl) statusEl.innerHTML = '<span style="color:#57606a;">⏳ Contacting Google Sheets to process pending alerts...</span>';
+
+      const fullUrl = url + '?' + new URLSearchParams({ action: 'PROCESS_PENDING_ALERTS' }).toString();
+      fetch(fullUrl, { method: 'GET', cache: 'no-store' })
+        .then(r => r.json())
+        .then(res => {
+          if (statusEl) statusEl.innerHTML = `<span style="color:#166534;">✅ Processed pending alerts! (${res.sentCount !== undefined ? res.sentCount + ' sent' : 'complete'})</span>`;
+          showToast('✅ Pending alerts processed on Google Sheet.');
+        })
+        .catch(() => {
+          // Open in new tab fallback if CORS prevents direct fetch
+          window.open(fullUrl, '_blank');
+          if (statusEl) statusEl.innerHTML = '<span style="color:#57606a;">🔗 Triggered in new tab — check Pending_Alerts sheet.</span>';
+        });
+    }
+
     function debugScheduleAlert() {
       const statusEl = document.getElementById('testEmailStatus');
       const sel = document.getElementById('testEmailInspector');
@@ -4746,6 +5166,42 @@ function doGet(e) {
     window.addEventListener('online', () => {
       showToast("🌐 Network connected!", 3000);
       loadGoogleSheetConfig();
+    });
+
+    // ==========================================
+    // UPDATE LOG FAB
+    // ==========================================
+    function openUpdateLog() {
+      const overlay = document.getElementById('updateLogOverlay');
+      if (!overlay) return;
+
+      // APP_VERSION is always the authoritative version for this build
+      const ver = APP_VERSION;
+      const versionText = document.getElementById('updateLogVersionText');
+      const subtitle = document.getElementById('updateLogSubtitle');
+      if (versionText) versionText.innerText = 'v' + ver;
+      if (subtitle) subtitle.innerText = 'Jabra Floorwalk Checklist — v' + ver;
+
+      // Always show the embedded notes for this build (cloud notes shown after sync)
+      const notes = (localStorage.getItem('jabra_app_release_notes') || EMBEDDED_RELEASE_NOTES).trim();
+      const notesEl = document.getElementById('updateLogNotes');
+      if (notesEl) notesEl.textContent = notes;
+
+      overlay.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeUpdateLog() {
+      const overlay = document.getElementById('updateLogOverlay');
+      if (overlay) overlay.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    // Close update log on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeUpdateLog();
+      }
     });
 
     window.addEventListener('DOMContentLoaded', init);
